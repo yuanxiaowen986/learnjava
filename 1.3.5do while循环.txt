@@ -1,0 +1,69 @@
+﻿在Java中，while循环是先判断循环条件，再执行循环。而另一种do while循环则是先执行循环，再判断条件，条件满足时继续循环，条件不满足时退出。它的用法是：
+
+do {
+    执行循环语句
+} while (条件表达式);
+可见，do while循环会至少循环一次。
+
+我们把对1到100的求和用do while循环改写一下：
+
+// do-while
+public class Main {
+    public static void main(String[] args) {
+        int sum = 0;
+        int n = 1;
+        do {
+            sum = sum + n;
+            n ++;
+        } while (n <= 100);
+        System.out.println(sum);
+    }
+}
+
+ Run
+使用do while循环时，同样要注意循环条件的判断。
+
+练习
+使用do while循环计算从m到n的和。
+
+// do while
+public class Main {
+	public static void main(String[] args) {
+		int sum = 0;
+        int m = 20;
+		int n = 100;
+		// 使用do while计算M+...+N:
+		do {
+		} while (false);
+		System.out.println(sum);
+	}
+}
+
+ Run
+下载练习：do while练习 （推荐使用IDE练习插件快速下载）
+
+/**
+ * 
+ * do while练习
+ * 
+ */
+
+public class DoWhileExample {
+	public static void main(String[] args) {
+		int sum = 0;
+		int m = 20;
+		int n = 100;
+		// FIXME: 使用do while计算M+...+N:
+		do {
+			sum = sum + m;
+			m++;
+		} while (m <= n);
+		System.out.println(sum);
+	}
+}
+
+
+小结
+do while循环先执行循环，再判断条件；
+
+do while循环会至少执行一次。
