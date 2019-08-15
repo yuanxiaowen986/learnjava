@@ -304,6 +304,9 @@ class Person {
  Run
 不要怀疑引用参数绑定的机制，试解释为什么上面的代码两次输出都是"Bob"。
 
+—》String[] fullname传递给p.name的是堆中的地址，共同操作堆中的内容。bob传递给p.name以后两者均指向常量池的Bob，后bob指向了常量池中的Alice，但是p.name仍然指向Bob，再一次 p.setName(bob);的话p.name将指向Alice。
+
+
 练习
 /**
  * 方法
