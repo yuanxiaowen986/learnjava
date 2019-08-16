@@ -1,5 +1,7 @@
 /**
- * 给Person增加构造方法
+ * 给Person增加构造方法; 给Person增加重载方法setName(String, String)
+ * 
+ * @author yuanxiaowen
  */
 public class Person {
 	private String name;
@@ -28,5 +30,9 @@ public class Person {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public void setName(String prename, String lastname) {
+		this.name = prename + " " + lastname;
 	}
 }
