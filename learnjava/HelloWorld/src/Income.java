@@ -1,10 +1,10 @@
 /**
- * 收入
+ * 收入,定义抽象类Income
  * 
  * @author Administrator
  * 
  */
-public class Income {
+public abstract class Income {
 
 	protected double income;
 
@@ -12,7 +12,6 @@ public class Income {
 		this.income = income;
 	}
 
-	public double getTax() {
-		return income * 0.1; // 税率10%
-	}
+	public abstract double getTax();
+
 }
