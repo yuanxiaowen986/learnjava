@@ -2,11 +2,12 @@
  * 稿费收入税率是20%
  * 
  */
-public class RoyaltyIncome extends Income {
+public class RoyaltyIncome implements Income {
 	// TODO
+	public double income;
 
 	public RoyaltyIncome(double income) {
-		super(income);
+		this.income = income;
 	}
 
 	@Override

@@ -4,10 +4,11 @@
  * @author Administrator
  * 
  */
-public class SalaryIncome extends Income {
+public class SalaryIncome implements Income {
+	public double income;
 
 	public SalaryIncome(double income) {
-		super(income);
+		this.income = income;
 	}
 
 	@Override

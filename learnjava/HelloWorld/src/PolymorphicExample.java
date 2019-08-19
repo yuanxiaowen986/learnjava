@@ -1,5 +1,5 @@
 /**
- * 多态/抽象类
+ * 多态/抽象类/接口
  * 
  * @author Administrator
  * 
