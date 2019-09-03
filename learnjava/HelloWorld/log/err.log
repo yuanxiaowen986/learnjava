@@ -1,0 +1,21 @@
+09-03 12:20:08.729 [main] ERROR com.itranswarp.world.CommonsLoggingExample
+invalidCharsetName
+
+java.io.UnsupportedEncodingException: invalidCharsetName
+	at java.lang.StringCoding.encode(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.String.getBytes(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.CommonsLoggingExample.main(CommonsLoggingExample.java:21) [bin/:?]
+09-03 13:24:58.276 [main] ERROR com.itranswarp.world.CommonsLoggingExample
+invalidCharsetName
+
+java.io.UnsupportedEncodingException: invalidCharsetName
+	at java.lang.StringCoding.encode(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.String.getBytes(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.CommonsLoggingExample.main(CommonsLoggingExample.java:20) [bin/:?]
+09-03 13:28:47.971 [main] ERROR com.itranswarp.world.CommonsLoggingExample
+invalidCharsetName
+
+java.io.UnsupportedEncodingException: invalidCharsetName
+	at java.lang.StringCoding.encode(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.String.getBytes(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.CommonsLoggingExample.main(CommonsLoggingExample.java:20) [bin/:?]
