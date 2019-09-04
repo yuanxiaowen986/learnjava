@@ -19,3 +19,27 @@ java.io.UnsupportedEncodingException: invalidCharsetName
 	at java.lang.StringCoding.encode(Unknown Source) ~[?:1.7.0_80]
 	at java.lang.String.getBytes(Unknown Source) ~[?:1.7.0_80]
 	at com.itranswarp.world.CommonsLoggingExample.main(CommonsLoggingExample.java:20) [bin/:?]
+09-04 13:16:17.508 [main] ERROR com.itranswarp.world.FieldExample
+error:
+
+java.lang.NoSuchFieldException: age
+	at java.lang.Class.getField(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.FieldExample.main(FieldExample.java:18) [bin/:?]
+09-04 13:17:55.661 [main] ERROR com.itranswarp.world.FieldExample
+error:
+
+java.lang.IllegalAccessException: Class com.itranswarp.world.FieldExample can not access a member of class com.itranswarp.world.Person with modifiers "private"
+	at sun.reflect.Reflection.ensureMemberAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.AccessibleObject.slowCheckMemberAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.AccessibleObject.checkAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.Field.set(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.FieldExample.main(FieldExample.java:19) [bin/:?]
+09-04 13:23:19.163 [main] ERROR com.itranswarp.world.FieldExample
+error:
+
+java.lang.IllegalAccessException: Class com.itranswarp.world.FieldExample can not access a member of class com.itranswarp.world.Person with modifiers "private"
+	at sun.reflect.Reflection.ensureMemberAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.AccessibleObject.slowCheckMemberAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.AccessibleObject.checkAccess(Unknown Source) ~[?:1.7.0_80]
+	at java.lang.reflect.Field.set(Unknown Source) ~[?:1.7.0_80]
+	at com.itranswarp.world.FieldExample.main(FieldExample.java:19) [bin/:?]
