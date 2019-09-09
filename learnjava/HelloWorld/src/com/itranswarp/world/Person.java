@@ -7,7 +7,7 @@ package com.itranswarp.world;
  * 
  * @author administrator
  */
-public class Person {
+public class Person implements Comparable<Person> {
 	@Range(min = 1, max = 20)
 	public String name;
 	@Range(min = 1, max = 100)
@@ -64,5 +64,11 @@ public class Person {
 	public String toString() {
 		return String.format("{Person: name=%s, city=%s, age=%d}", name, city,
 				age);
+	}
+
+	@Override
+	public int compareTo(Person o) {
+		// TODO Auto-generated method stub
+		return this.name.compareTo(o.name);
 	}
 }
