@@ -1,5 +1,7 @@
 package com.itranswarp.world;
 
+import java.util.Objects;
+
 /**
  * 给Person增加构造方法; 给Person增加重载方法setName(String, String)
  * 
@@ -16,9 +18,18 @@ public class Person implements Comparable<Person> {
 	@Range(max = 10)
 	public String city;
 
+	public String firstName;
+	public char lastName;
+
 	public Person(String name, String city, int age) {
 		this.name = name;
 		this.city = city;
+		this.age = age;
+	}
+
+	public Person(String firstName, char lastName, int age) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.age = age;
 	}
 
@@ -70,5 +81,15 @@ public class Person implements Comparable<Person> {
 	public int compareTo(Person o) {
 		// TODO Auto-generated method stub
 		return this.name.compareTo(o.name);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Person) {
+			Person p = (Person) o;
+			return (Objects.equals(this.firstName, p.firstName)
+					&& Objects.equals(this.lastName, p.lastName) && this.age == p.age);
+		}
+		return false;
 	}
 }
