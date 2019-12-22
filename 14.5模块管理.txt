@@ -1,0 +1,68 @@
+﻿在软件开发中，把一个大项目分拆为多个模块是降低软件复杂度的有效方法：
+
+                        ┌ ─ ─ ─ ─ ─ ─ ┐
+                          ┌─────────┐
+                        │ │Module A │ │
+                          └─────────┘
+┌──────────────┐ split  │ ┌─────────┐ │
+│Single Project│───────>  │Module B │
+└──────────────┘        │ └─────────┘ │
+                          ┌─────────┐
+                        │ │Module C │ │
+                          └─────────┘
+                        └ ─ ─ ─ ─ ─ ─ ┘
+对于Maven工程来说，原来是一个大项目：
+
+single-project
+├── pom.xml
+└── src
+现在可以分拆成3个模块：
+
+single-project
+├── module-a
+│   ├── pom.xml
+│   └── src
+├── module-b
+│   ├── pom.xml
+│   └── src
+└── module-c
+    ├── pom.xml
+    └── src
+Maven可以有效地管理多个模块，我们只需要把每个模块当作一个独立的Maven项目，它们有各自独立的pom.xml。例如，模块A的pom.xml：
+
+模块B的pom.xml：
+
+可以看出来，模块A和模块B的pom.xml高度相似，因此，我们可以提取出共同部分作为parent：
+
+注意到parent的packaging是pom而不是jar，因为parent本身不含任何java代码。编写parent的pom.xml只是为了在各个模块中减少重复的配置。现在我们的整个工程结构如下：
+
+single-project
+├── parent
+│   └── pom.xml
+├── module-a
+│   ├── pom.xml
+│   └── src
+├── module-b
+│   ├── pom.xml
+│   └── src
+└── module-c
+    ├── pom.xml
+    └── src
+如果模块A依赖模块B，则模块A需要模块B的jar包才能正常编译：
+
+中央仓库
+其实我们使用的大多数第三方模块都是这个用法，例如，我们使用commons logging、log4j这些第三方模块， 就是第三方模块的开发者自己把编译好的jar包发布到maven的中央仓库中。
+
+私有仓库
+
+本地仓库
+但是我们不推荐把自己的模块安装到maven的本地仓库，因为每次修改模块b的源码，都需要重新安装， 容易出现版本不一致的情况
+
+推荐的做法是模块化编译，在编译的时候，告诉maven几个模块之间存在依赖关系，需要一块编译， maven就会自动按依赖顺序编译这些模块
+
+<modules>
+    <module>模块A</module>
+    <module>模块B</module>
+    <module>模块C</module>
+</modules>
+Maven支持模块化管理，可以把一个大项目拆成几个模块 可以通过继承在parent的pom.xml统一定义重复配置 可以通过<modules>编译多个模块
