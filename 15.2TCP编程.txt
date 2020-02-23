@@ -1,36 +1,36 @@
-�ڿ�������Ӧ�ó����ʱ�������ֻ�����Socket������Socket��һ��������һ��Ӧ�ó���ͨ��һ��Socket������һ��Զ�����ӣ���Socket�ڲ�
-ͨ��TCP/IPЭ������ݴ��䵽����:
+在开发网络应用程序的时候，我们又会遇到Socket这个概念。Socket是一个抽象概念，一个应用程序通过一个Socket来建立一个远程连接，而Socket内部
+通过TCP/IP协议把数据传输到网络:
 Application                             Application
   Socket                                 Socket
    TCP                                    TCP 
    IP<------>Router<------->Router<------>IP 
    
-Socket��TCP�Ͳ���IP�Ĺ��ܶ����ɲ���ϵͳ�ṩ�ģ���ͬ�ı������ֻ���ṩ�˶Բ���ϵͳ���õļ򵥵ķ�װ�����磬Java�ṩ�ļ���Socket��ص����
-��װ�˲���ϵͳ�ṩ�Ľӿڡ�
+Socket、TCP和部分IP的功能都是由操作系统提供的，不同的编程语言只是提供了对操作系统调用的简单的封装。例如，Java提供的几个Socket相关的类就
+封装了操作系统提供的接口。
 
-Ϊʲô��ҪSocket��������ͨ�ţ���Ϊ����ͨ��IP��ַ����ͨ���ǲ����ģ�ͬһ̨�����ͬһʱ�����ж������Ӧ�ó��������������QQ���ʼ��ͻ��˵ȡ�
-������ϵͳ���յ�һ�����ݰ���ʱ�����ֻ��IP��ַ����û���ж�Ӧ�÷����ĸ�Ӧ�ó������ԣ�����ϵͳ�����Socket�ӿڣ�ÿ��Ӧ�ó�����Ҫ���Զ�Ӧ
-����ͬ��Socket�����ݰ����ܸ���Socket��ȷ�ط�����Ӧ��Ӧ�ó���
+为什么需要Socket进行网络通信？因为仅仅通过IP地址进行通信是不够的，同一台计算机同一时间运行多个网络应用程序，例如浏览器、QQ、邮件客户端等。
+当操作系统接收到一个数据包的时候，如果只有IP地址，它没法判断应该发给哪个应用程序，所以，操作系统抽象出Socket接口，每个应用程序需要各自对应
+到不同的Socket，数据包才能根据Socket正确地发到对应的应用程序。
 
-һ��Socket������IP��ַ�Ͷ˿ںţ���Χ��0-65535����ɣ����԰�Socket������ΪIP��ַ�Ӷ˿ںš��˿ں������ɲ���ϵͳ���䣬����һ��0-65535֮�����
-�֣����У�С��1024�Ķ˿ں�������Ȩ�˿ڣ���Ҫ����ԱȨ�ޣ�����1024�Ķ˿ڿ����������û���Ӧ�ó���򿪡�
-IE 101.202.99.2��1201
-QQ 101.202.99.2��1304
+一个Socket就是由IP地址和端口号（范围是0-65535）组成，可以把Socket简单理解为IP地址加端口号。端口号总是由操作系统分配，它是一个0-65535之间的数
+字，其中，小于1024的端口号属于特权端口，需要管理员权限，大于1024的端口可以由任意用户的应用程序打开。
+IE 101.202.99.2：1201
+QQ 101.202.99.2：1304
 MAIL 101.202.99.2:15000
 
-ʹ��Socket����������ʱ�������Ͼ�����������֮�������ͨ�š�����һ�����̱���䵱�������ˣ�������������ĳ��ָ���Ķ˿ڣ���һ�����̱���䵱
-�ͻ��ˣ��������������ӷ�������IP��ַ��ָ���˿ڣ�������ӳɹ����������˺Ϳͻ��˾ͳɹ��ؽ�����һ��TCP���ӣ�˫�������Ϳ�����ʱ���ͺͽ������� �� 
+使用Socket进行网络编程时，本质上就是两个进程之间的网络通信。其中一个进程必须充当服务器端，它会主动监听某个指定的端口，另一个进程必须充当
+客户端，它必须主动连接服务器的IP地址和指定端口，如果连接成功，服务器端和客户端就成功地建立了一个TCP连接，双方后续就可以随时发送和接收数据 。 
 
-��ˣ���Socket���ӳɹ��ط������Ϳͻ���֮�佨����
-1.�Է���������˵������Socket��ָ����IP��ַ��ָ���Ķ˿ںţ�
-2.�Կͻ�����˵������Socket�������ڼ������IP��ַ��һ���ɲ���ϵͳ���������˿ںš�
+因此，当Socket连接成功地服务器和客户端之间建立后：
+1.对服务器端来说，它的Socket是指定的IP地址和指定的端口号；
+2.对客户端来说，它的Socket是它所在计算机的IP地址和一个由操作系统分配的随机端口号。
 
-��������
-Ҫʹ��Socket��̣���������Ҫ��д�������˳���Java��׼���ṩ��ServerSocket��ʵ�ֶ�ָ��IP��ָ���˿ڵļ�����ServerSocket�ĵ���ʵ�ִ���
-���£�
+服务器端
+要使用Socket编程，我们首先要编写服务器端程序。Java标准库提供了ServerSocket来实现对指定IP和指定端口的监听。ServerSocket的典型实现代码
+如下：
 public class Server{
     public static void main(String[] args) throws IOException{
-		ServerSocket ss=new ServerSocket(6666);//����ָ���˿�
+		ServerSocket ss=new ServerSocket(6666);//监听指定端口
 		System.out.println("server is running...");
 		for(;;){
 			Socket sock=ss.accept();
@@ -81,30 +81,30 @@ class Handler extends Thread{
 	}
 }
 
-��������ͨ�����룺
+服务器端通过代码：
 ServerSocket ss = new ServerSocket(6666);
-��ָ���˿�6666��������������û��ָ��IP��ַ����ʾ�ڼ��������������ӿ��Ͻ��м�����
-���ServerSocket�����ɹ������Ǿ�ʹ��һ��������ѭ���������ͻ�������
+在指定端口6666监听。这里我们没有指定IP地址，表示在计算机的所有网络接口上进行监听。
+如果ServerSocket监听成功，我们就使用一：个无限循环来处理客户的连接
 for(;;){
 	Socket sock = ss.accept();
 	Thread t = new Handler(sock);
 	t.start();
 }
-ע�⵽����ss.accept()��ʾÿ�����µĿͻ������ӽ����󣬾ͷ���һ��Socketʵ�������Socketʵ�����������͸����ӵĿͻ��˽���ͨ�ŵġ����ڿͻ���
-�ܶ࣬Ҫʵ�ֲ������������Ǿͱ���ÿ���µ�Socket����һ�����߳������������������̵߳����þ��ǽ����µ����ӣ�ÿ���յ������Ӻ󣬾ʹ���
-һ�����߳̽��д�����
+注意到代码ss.accept()表示每当有新的客户端连接进来后，就返回一个Socket实例，这个Socket实例就是用来和刚连接的客户端进行通信的。由于客户端
+很多，要实现并发处理，我们就必须每个新的Socket创建一个新线程来处理，这样，主线程的作用就是接收新的连接，每当收到新连接后，就创建
+一个新线程进行处理。
 
-�����ڶ��̱߳�̵��½��н��ܹ��̳߳أ�����Ҳ��ȫ���������̳߳��������ͻ������ӣ��ܴ���������Ч�ʡ�
+我们在多线程编程的章节中介绍过线程池，这里也完全可以利用线程池来处理客户端连接，能大大提高运行效率。
 
-���û�пͻ������ӽ�����accept()������������һֱ�ȴ�������ж���ͻ���ͬʱ���ӽ�����ServerSocket��������ӵ������Ȼ��һ������
-��������Java������ԣ�ֻ��Ҫͨ��ѭ�����ϵ���accept()�Ϳ��Ի�ȡ�µ����ӡ�
+如果没有客户端连接进来，accept()方法会阻塞并一直等待。如查有多个客户端同时连接进来，ServerSocket会把连接扔到队列里，然后一个个处
+理。对于Java程序而言，只需要通过循环不断调用accept()就可以获取新的连接。
 
 
-�ͻ���
-��ȷ������ˣ��ͻ��˳����Ҫ�򵥺ܶࡣһ�����͵Ŀͻ��˳�������:
+客户端
+相比服务器端，客户端程序就要简单很多。一个典型的客户端程序如下:
 public class Client{
 	public static void main(String[] args) throws IOException{
-		Socket sock = new Socket("localhost",6666);//����ָ���������Ͷ˿�
+		Socket sock = new Socket("localhost",6666);//连接指定服务器和端口
 		try(InputStream input = sock.getInputStream()){
 			try(OutputStream output = sock.getOutputStream()){
 				handle(input, output);
@@ -120,8 +120,8 @@ public class Client{
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("[server]" + reader.readLine());
 		for(;;){
-			System.out.println(">>> ");//��ӡ��ʾ
-			String s = scanner.nextLine();//��ȡһ������
+			System.out.println(">>> ");//打印提示
+			String s = scanner.nextLine();//读取一行输入
 			writer.write(s);
 			writer.newLine();
 			writer.flush();
@@ -134,30 +134,30 @@ public class Client{
 	}
 }
 
-�ͻ��˳���ͨ����
+客户端程序通过：
 Socket sock = new Socket("localhost",6666);
-���ӵ���������ע����������ķ�������ַ�ǡ�localhost��,��ʾ������ַ���˿ں���6666��������ӳɹ���������һ��Socketʵ�������ں���ͨ�š�
+连接到服务器，注意上述代码的服务器地址是“localhost”,表示本机地址，端口号是6666。如果连接成功，将返回一个Socket实例，用于后续通信。
 
 
-Socket��
-��Socket���Ӵ����ɹ��������Ƿ������ˣ����ǿͻ��ˣ����Ƕ���ʹ��Socketʵ����������ͨ�š���ΪTCP��һ�ֻ�������Э�飬��ˣ�JAVA��׼��ʹ
-��InputStream��OutputStream����װSocket������������������ʹ��Socket����������ͨIO�����ƣ�
-//���ڶ�ȡ�������ݣ�
+Socket流
+当Socket连接创建成功后，无论是服务器端，还是客户端，我们都是使用Socket实例进行网络通信。因为TCP是一种基于流的协议，因此，JAVA标准库使
+用InputStream和OutputStream来封装Socket的数据流，这样我们使用Socket的流，和普通IO流类似：
+//用于读取网络数据：
 InputStream in = sock.getInputStream();
-//����д���������ݣ�
+//用于写入网络数据：
 OutputStream out = sock.getOutputStream();
 
-��������ص���������Ϊʲôд����������ʱ��Ҫ����flush()������
-���������flush()�����Ǻܿ��ܻᷢ�֣��ͻ��˺ͷ��������ղ������ݣ��Ⲣ����Java��׼���������⣬����������������ʽд�����ݵ�ʱ�򣬲���
-һд������̷��͵����磬������д���ڴ滺������ֱ�����������Ժ󣬲Ż�һ�����������͵����磬������Ƶ�Ŀ����Ϊ����ߴ���Ч�ʡ������
-���������ݺ��٣�����������ǿ�ư���Щ���ݷ��͵����磬�ͱ������flush()ǿ�ưѻ��������ݷ��ͳ�ȥ��
+最后我们重点来看看，为什么写入网络数据时，要调用flush()方法。
+如果不调用flush()，我们很可能会发现，客户端和服务器都收不到数据，这并不是Java标准库的设计问题，而是我们以流的形式写入数据的时候，并不
+一写入就立刻发送到网络，而是先写入内存缓冲区，直到缓冲区满以后，才会一次性真正发送到网络，这样设计的目的是为了提高传输效率。如果缓
+冲区的数据很少，而我们又想强制把这些数据发送到网络，就必须调用flush()强制把缓冲区数据发送出去。
 
 
-С��
-ʹ��Java����TCP���ʱ����Ҫʹ��Socketģ�ͣ�
-.����������ServerSocket����ָ�Ŷ˿ڣ�
-.�ͻ���ʹ��Socket(InetAddress, port)���ӷ�������
-.����������accetp()�������Ӳ�����Socket;
-.˫��ͨ��Socket��InputStream/OutputStream��д���ݣ�
-.��������ͨ��ʹ�ö��߳�ͬʱ��������ͻ������ӣ������̳߳ؿɴ������Ч�ʣ�
-.flush()����ǿ����������������硣
+小结
+使用Java进行TCP编程时，需要使用Socket模型：
+.服务器端用ServerSocket监听指寂端口；
+.客户端使用Socket(InetAddress, port)连接服务器；
+.服务器端用accetp()接收连接并返回Socket;
+.双方通过Socket打开InputStream/OutputStream读写数据；
+.服务器端通过使用多线程同时处理多个客户端连接，利用线程池可大幅提升效率；
+.flush()用于强制输出缓冲区到网络。
