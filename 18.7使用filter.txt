@@ -1,0 +1,151 @@
+Stream.filter()是Stream的另一个常用转换方法。
+
+所谓filter()操作，就是对一个Stream的所有元素一一进行测试，不满足条件的就被“滤掉”了，剩下的满足条件的元素就构成了一个新的Stream。
+
+例如，我们对1，2，3，4，5这个Stream调用filter()，传入的测试函数f(x) = x % 2 != 0用来判断元素是否是奇数，这样就过滤掉偶数，只剩下奇数，因此我们得到了另一个序列1，3，5：
+            f(x) = x % 2 != 0
+
+                  │
+                  │
+  ┌───┬───┬───┬───┼───┬───┬───┬───┐
+  │   │   │   │   │   │   │   │   │
+  ▼   ▼   ▼   ▼   ▼   ▼   ▼   ▼   ▼
+
+[ 1   2   3   4   5   6   7   8   9 ]
+
+  │   X   │   X   │   X   │   X   │
+  │       │       │       │       │
+  ▼       ▼       ▼       ▼       ▼
+
+[ 1       3       5       7       9 ]
+用IntStream写出上述逻辑，代码如下：
+import java.util.stream.IntStream;
+public class Main {
+    public static void main(String[] args) {
+        IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9)
+                .filter(n -> n % 2 != 0)
+                .forEach(System.out::println);
+    }
+}
+
+ Run
+从结果可知，经过filter()后生成的Stream元素可能变少。
+
+filter()方法接收的对象是Predicate接口对象，它定义了一个test()方法，负责判断元素是否符合条件：
+@FunctionalInterface
+public interface Predicate<T> {
+    // 判断元素t是否符合条件:
+    boolean test(T t);
+}
+filter()除了常用于数值外，也可应用于任何Java对象。例如，从一组给定的LocalDate中过滤掉工作日，以便得到休息日：
+import java.time.*;
+import java.util.function.*;
+import java.util.stream.*;
+public class Main {
+    public static void main(String[] args) {
+        Stream.generate(new LocalDateSupplier())
+                .limit(31)
+                .filter(ldt -> ldt.getDayOfWeek() == DayOfWeek.SATURDAY || ldt.getDayOfWeek() == DayOfWeek.SUNDAY)
+                .forEach(System.out::println);
+    }
+}
+
+class LocalDateSupplier implements Supplier<LocalDate> {
+    LocalDate start = LocalDate.of(2020, 1, 1);
+    int n = -1;
+    public LocalDate get() {
+        n++;
+        return start.plusDays(n);
+    }
+}
+
+ Run
+练习
+请使用filter()过滤出成绩及格的同学，并打印出名字。
+
+public class Main {
+
+	public static void main(String[] args) {
+		List<Person> persons = List.of(new Person("小明", 88), new Person("小黑", 62), new Person("小白", 45),
+				new Person("小黄", 78), new Person("小红", 99), new Person("小林", 58));
+		// 请使用filter过滤出及格的同学，然后打印名字:
+		persons.stream().filter(s -> s.score >= 60).forEach(p -> System.out.println(p.name));
+	}
+}
+
+class Person {
+	String name;
+	int score;
+
+	Person(String name, int score) {
+		this.name = name;
+		this.score = score;
+	}
+}
+
+package com.itranswarp.learnjava;
+
+import java.util.stream.Stream;
+import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.function.Supplier;
+import java.util.regex.Pattern;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+
+public class StreamTest {
+	public static void main(String[] args){
+		Stream<String> stream = Stream.of("A","B","C","D");
+		Stream<String> stream1 = Arrays.stream(new String[]{"A1","B1","C1","D1"});
+		List<String> st = new ArrayList<String>();
+		st.add("A2");
+		st.add("B2");
+		st.add("C2");
+		st.add("D2");
+		Stream<String> stream2 = st.stream();
+		stream.forEach(System.out::println);
+		stream1.forEach(System.out::println);
+		stream2.forEach(System.out::println);
+		//System.out.println(stream2.count());
+		
+		Stream<Integer> stream3 =Stream.generate(new NaturalSupplier());
+		stream3.filter(n->n%2 == 0).limit(20).forEach(System.out::println);
+		
+		Pattern p = Pattern.compile("\\s+");
+		Stream<String> s = p.splitAsStream("The quick brown fox jumps over the lazy dog");
+		s.forEach(System.out::println);
+		
+		try {
+			Stream<String> lines = Files.lines(Paths.get("D:/workspace/maven-hello/file.txt"));
+			lines.forEach(System.out::println);
+		} catch (IOException e) {		
+			e.printStackTrace();
+		}	
+		
+		Stream<String> st4 = Arrays.stream(new String[]{"2020-07-01","2020-08-01","2020-08-08","2020-08-09"});
+		st4.map(LocalDate::parse).forEach(System.out::println);
+	}
+
+}
+
+class NaturalSupplier implements Supplier{
+	int n1=0;
+	int n2=1;
+
+	@Override
+	public Object get() {
+		int temp=n2;
+		n2=n1+n2;
+		n1=temp;
+		return temp;
+	}
+	
+}
+
+
+小结
+使用filter()方法可以对一个Stream的每个元素进行测试，通过测试的元素被过滤后生成一个新的Stream。
