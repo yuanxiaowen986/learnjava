@@ -110,6 +110,41 @@ class Student {
 }
 如果我们有一个Stream<Student>，利用分组输出，可以非常简单地按年级或班级把Student归类。
 
+package com.itranswarp.learnjava;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class StreamToCollect {
+
+	public static void main(String[] args) {
+		List<String> ls = new ArrayList<String>();	
+		ls.add("xiaoming");
+		ls.add("xiaowen");
+		ls.add("xiaohong");
+		Stream<String> st = Stream.of("first","second");
+		
+	    List<String> ls2 = ls.stream().collect(Collectors.toList());
+	    String[] ls3 = ls.stream().toArray(String[]::new);
+	    Map<String,String> ls4 =st.collect(Collectors.toMap(s->s.substring(0,1), s->s));
+	    Map<String,String> ls5 =ls.stream().collect(Collectors.toMap(s->s.substring(0,5), s->s));
+	    Map<String, List<String>> ls6 = ls.stream()
+	    		.collect(Collectors.groupingBy(s->s.substring(0,1), Collectors.toList()));	
+	    
+	    System.out.println(ls2);
+	    System.out.println(ls3);
+	    System.out.println(ls4);
+	    System.out.println(ls5);
+	    System.out.println(ls6);
+
+	}
+
+}
+
+
 
 小结
 Stream可以输出为集合：
