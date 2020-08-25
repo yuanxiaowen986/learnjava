@@ -97,6 +97,66 @@ s.forEach(str -> {
 });
 
 
+package com.itranswarp.learnjava;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class StreamToCollect {
+
+	public static void main(String[] args) {
+		List<String> ls = new ArrayList<String>();	
+		ls.add("xiaoming");
+		ls.add("xiaowen");
+		ls.add("xiaohong");
+		Stream<String> st = Stream.of("first","second");
+		
+	    List<String> ls2 = ls.stream().collect(Collectors.toList());
+	    String[] ls3 = ls.stream().toArray(String[]::new);
+	    Map<String,String> ls4 =st.collect(Collectors.toMap(s->s.substring(0,1), s->s));
+	    Map<String,String> ls5 =ls.stream().collect(Collectors.toMap(s->s.substring(0,5), s->s));
+	    Map<String, List<String>> ls6 = ls.stream()
+	    		.collect(Collectors.groupingBy(s->s.substring(0,1), Collectors.toList()));	
+	    
+	    System.out.println(ls2);
+	    System.out.println(ls3);
+	    System.out.println(ls4);
+	    System.out.println(ls5);
+	    System.out.println(ls6);
+	    
+	    List<String> ls7 = new ArrayList<String>();
+	    ls7.add("A");
+	    ls7.add("B");
+	    ls7.add("C");
+	    ls7.add("A");
+	    ls7.add("B");
+	    ls7.add("C");
+	    List<String> ls8 = ls7.stream().distinct().collect(Collectors.toList());
+	    List<String> ls9 = ls7.stream().sorted().collect(Collectors.toList());
+	    String ls10 = ls7.stream().max((s,n)->{
+	    		if(s.hashCode()>n.hashCode()){
+	    			return 1;
+	    		}
+	    		if(s.hashCode()==n.hashCode()){
+	    			return 0;
+	    		}
+	    		return -1;
+	    }).get();
+	    List<String> ls11 = Stream.concat(ls.stream(), ls7.stream().distinct()).collect(Collectors.toList());
+	    System.out.println(ls7);
+	    System.out.println(ls8);
+	    System.out.println(ls9);
+	    System.out.println(ls10);
+	    System.out.println(ls11);
+
+	}
+
+}
+
+
 小结
 Stream提供的常用操作有：
 转换操作：map()，filter()，sorted()，distinct()；
