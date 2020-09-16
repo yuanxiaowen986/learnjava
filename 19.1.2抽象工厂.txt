@@ -1,4 +1,4 @@
-提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
+﻿提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
 
 抽象工厂模式（Abstract Factory）是一个比较复杂的创建型模式。
 
@@ -128,6 +128,155 @@ worddoc
 使用Abstract Factory模式实现HtmlDocument和WordDocument。
 
 从下载练习：Abstract Factory模式 （推荐使用IDE练习插件快速下载）
+
+package com.itranswarp.learnjava;
+
+public interface AbstracFactory {
+	HtmlDocment createHtml(String s);
+	
+	WordDocment createWord(String s);
+	
+	static AbstracFactory select(String s){
+		AbstracFactory yxwfactory=null;
+		if ("YXW".equalsIgnoreCase(s)){
+			yxwfactory = new YxwFactory();			
+		}else{
+			throw new IllegalArgumentException("Invalid factory name");
+		}
+		return yxwfactory;
+	}
+
+}
+
+package com.itranswarp.learnjava;
+
+import java.nio.file.Path;
+
+public interface HtmlDocment {
+	void save(Path path);
+
+}
+
+
+package com.itranswarp.learnjava;
+
+import java.nio.file.Path;
+
+public interface WordDocment {
+	void save(Path path);
+}
+
+
+package com.itranswarp.learnjava;
+
+public class YxwFactory implements AbstracFactory {
+
+	@Override
+	public HtmlDocment createHtml(String s) {
+		return new YxwHtmlDocment();
+	}
+
+	@Override
+	public WordDocment createWord(String s) {		
+		return new YxwWordDocment();
+	}
+
+}
+
+package com.itranswarp.learnjava;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.nio.file.Path;
+
+public class YxwHtmlDocment implements HtmlDocment {
+
+	@Override
+	public void save(Path path) {
+		PrintStream printStream = null;
+		
+		//用于存储html字符串
+		StringBuilder stringHtml = new StringBuilder();
+		try{
+		//打开文件
+		printStream = new PrintStream(new FileOutputStream("./test.html"));
+		}catch(FileNotFoundException e){
+		e.printStackTrace();
+		}
+		//输入HTML文件内容
+		stringHtml.append("<html><head>");
+		stringHtml.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=GBK\">");
+		stringHtml.append("<title>测试报告文档</title>");
+		stringHtml.append("</head>");
+		stringHtml.append("<body>");
+		stringHtml.append("<div>hello</div>");
+		stringHtml.append("</body></html>");
+		try{
+		//将HTML文件内容写入文件中
+		printStream.println(stringHtml.toString());
+		}catch (Exception e) {		 
+		e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+package com.itranswarp.learnjava;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
+public class YxwWordDocment implements WordDocment {
+
+	@Override
+	public void save(Path path) {	
+	  //Blank Document
+	   XWPFDocument document= new XWPFDocument(); 
+	   //Write the Document in file system
+	   FileOutputStream out=null;
+	try {
+		out = new FileOutputStream(
+		   new File("createdocument.docx"));
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   try {
+		document.write(out);
+		out.close();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
+	System.out.println(
+	   "createdocument.docx written successully");
+	}
+	
+	public static void main(String[] args){
+		// 创建AbstracFactory，实际类型是YxwFactory:
+		AbstracFactory factory = AbstracFactory.select("YXW");
+		// 生成Html文档:
+		HtmlDocment html = factory.createHtml("#Hello\nHello, world!");
+		html.save(Paths.get(".", "yxw.html"));
+		// 生成Word文档:
+		WordDocment word = factory.createWord("#Hello\nHello, world!");
+		word.save(Paths.get(".", "yxw.doc"));
+		
+	}
+
+}
+
+
+
 
 小结
 抽象工厂模式是为了让创建工厂和一组产品与使用相分离，并可以随时切换到另一个工厂以及另一组产品；
